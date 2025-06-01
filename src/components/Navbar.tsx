@@ -46,9 +46,9 @@ const Navbar: React.FC = () => {
               <span className="text-white font-bold text-lg">B</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold text-agri-primary">
-                Bindisa
-              </span>
+              <div className="text-xl font-bold text-agri-primary">
+                <p>Bindsa</p>
+              </div>
               <span className="text-xs text-agri-secondary">Agritech</span>
             </div>
           </Link>

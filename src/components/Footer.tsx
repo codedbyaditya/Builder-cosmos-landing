@@ -39,14 +39,30 @@ const Footer: React.FC = () => {
           {/* Company Info */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-12 h-12 bg-agri-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">B</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-2xl font-bold text-white">
-                  Bindisa Agritech
-                </span>
-                <span className="text-sm text-gray-300">Pvt. Ltd.</span>
+              <div className="h-12 w-auto flex items-center">
+                <img
+                  src="/bindisa-logo.png"
+                  alt="Bindisa Agritech"
+                  className="h-12 w-auto object-contain filter brightness-0 invert"
+                  onError={(e) => {
+                    // Fallback to text logo if image fails to load
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = "none";
+                    target.nextElementSibling?.classList.remove("hidden");
+                  }}
+                />
+                {/* Fallback text logo */}
+                <div className="hidden flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-agri-primary rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-xl">B</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-2xl font-bold text-white">
+                      Bindisa Agritech
+                    </span>
+                    <span className="text-sm text-gray-300">Pvt. Ltd.</span>
+                  </div>
+                </div>
               </div>
             </div>
             <p className="text-gray-300 mb-6 max-w-md">{t("footer.tagline")}</p>

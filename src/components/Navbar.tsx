@@ -42,14 +42,29 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-agri-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">B</span>
+            <div className="w-12 h-12 bg-gradient-to-br from-agri-primary to-agri-primary-light rounded-lg flex items-center justify-center relative overflow-hidden">
+              {/* Logo Background Pattern */}
+              <div className="absolute inset-0 opacity-20">
+                <svg viewBox="0 0 24 24" className="w-full h-full">
+                  <path
+                    d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+              <span className="text-white font-bold text-xl relative z-10">
+                B
+              </span>
             </div>
             <div className="flex flex-col">
-              <div className="text-xl font-bold text-agri-primary">
-                <p>Bindsa</p>
+              <div className="text-xl font-bold">
+                <span className="bg-gradient-to-r from-agri-primary via-green-600 to-agri-primary-light bg-clip-text text-transparent">
+                  BINDISA
+                </span>
               </div>
-              <span className="text-xs text-agri-secondary">Agritech</span>
+              <span className="text-xs text-agri-secondary font-medium tracking-wider">
+                AGRITECH
+              </span>
             </div>
           </Link>
 

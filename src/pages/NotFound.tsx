@@ -21,8 +21,22 @@ const NotFound: React.FC = () => {
           <CardContent className="p-8">
             {/* Logo */}
             <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-agri-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-2xl">B</span>
+              <div className="h-16 w-auto flex items-center">
+                <img
+                  src="/bindisa-logo.png"
+                  alt="Bindisa Agritech"
+                  className="h-16 w-auto object-contain"
+                  onError={(e) => {
+                    // Fallback to text logo if image fails to load
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = "none";
+                    target.nextElementSibling?.classList.remove("hidden");
+                  }}
+                />
+                {/* Fallback text logo */}
+                <div className="hidden w-16 h-16 bg-agri-primary rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-2xl">B</span>
+                </div>
               </div>
             </div>
 

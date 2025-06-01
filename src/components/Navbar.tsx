@@ -48,21 +48,27 @@ const Navbar: React.FC = () => {
                 alt="Bindisa Agritech"
                 className="h-12 w-auto object-contain"
                 onError={(e) => {
-                  // Fallback to simplified logo if image fails to load
+                  // Fallback to minimal logo if image fails to load
                   const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                  target.nextElementSibling?.classList.remove('hidden');
+                  target.style.display = "none";
+                  target.nextElementSibling?.classList.remove("hidden");
                 }}
               />
               {/* Minimal fallback */}
-              <div className="hidden flex items-center">
-                <div className="w-12 h-12 bg-gradient-to-br from-agri-primary to-agri-primary-light rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">B</span>
+              <div className="hidden flex items-center space-x-2">
+                <div className="w-10 h-10 bg-gradient-to-br from-agri-primary to-agri-primary-light rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">B</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-lg font-bold text-agri-primary">
+                    BINDISA
+                  </span>
+                  <span className="text-xs text-agri-secondary">AGRITECH</span>
                 </div>
               </div>
             </div>
           </Link>
-          </Link>
+
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (

@@ -41,34 +41,27 @@ const Navbar: React.FC = () => {
       <div className="container-max section-padding">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="h-10 w-auto flex items-center">
+          <Link to="/" className="flex items-center">
+            <div className="h-12 w-auto flex items-center">
               <img
                 src="/bindisa-logo.png"
                 alt="Bindisa Agritech"
-                className="h-10 w-auto object-contain"
+                className="h-12 w-auto object-contain"
                 onError={(e) => {
-                  // Fallback to text logo if image fails to load
+                  // Fallback to simplified logo if image fails to load
                   const target = e.target as HTMLImageElement;
-                  target.style.display = "none";
-                  target.nextElementSibling?.classList.remove("hidden");
+                  target.style.display = 'none';
+                  target.nextElementSibling?.classList.remove('hidden');
                 }}
               />
-              {/* Fallback text logo */}
-              <div className="hidden flex items-center space-x-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-agri-primary to-agri-primary-light rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">B</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xl font-bold bg-gradient-to-r from-agri-primary via-green-600 to-agri-primary-light bg-clip-text text-transparent">
-                    BINDISA
-                  </span>
-                  <span className="text-xs text-agri-secondary font-medium tracking-wider">
-                    AGRITECH
-                  </span>
+              {/* Minimal fallback */}
+              <div className="hidden flex items-center">
+                <div className="w-12 h-12 bg-gradient-to-br from-agri-primary to-agri-primary-light rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">B</span>
                 </div>
               </div>
             </div>
+          </Link>
           </Link>
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">

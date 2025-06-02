@@ -104,6 +104,15 @@ export const teamMembers: TeamMember[] = [
     category: "finance",
     image: "/api/placeholder/300/300",
   },
+  {
+    id: "12",
+    name: "Aditya Deshmukh",
+    role: "Web Development Lead",
+    description:
+      "Leading web development initiatives and creating digital solutions for modern agriculture.",
+    category: "tech",
+    image: "/api/placeholder/300/300",
+  },
 ];
 
 export const categoryNames = {

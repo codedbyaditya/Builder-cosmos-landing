@@ -63,7 +63,20 @@ const Navbar: React.FC = () => {
                 className="w-full ml-5 min-h-5 min-w-5 object-cover object-center overflow-hidden"
                 style={{ aspectRatio: "1.42" }}
               />
-              <span className="text-white font-bold text-lg">B</span>
+              <img
+                src="/bindisa-agritech-logo.png"
+                alt="Bindisa Agritech"
+                className="h-8 w-auto object-contain"
+                onError={(e) => {
+                  // Final fallback to B text if logo also fails
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = "none";
+                  const textFallback = document.createElement("span");
+                  textFallback.className = "text-white font-bold text-lg";
+                  textFallback.textContent = "B";
+                  target.parentElement?.appendChild(textFallback);
+                }}
+              />
             </div>
           </Link>
 

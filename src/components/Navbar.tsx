@@ -40,33 +40,24 @@ const Navbar: React.FC = () => {
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       <div className="container-max section-padding">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
+          {/* Logo - Using actual Bindisa Agritech logo image */}
           <Link to="/" className="flex items-center">
-            <div className="h-12 w-auto flex items-center">
-              <img
-                src="/bindisa-logo.png"
-                alt="Bindisa Agritech"
-                className="h-12 w-auto object-contain"
-                onError={(e) => {
-                  // Fallback to minimal logo if image fails to load
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = "none";
-                  target.nextElementSibling?.classList.remove("hidden");
-                }}
-              />
-              {/* Minimal fallback */}
-              <div className="hidden flex items-center space-x-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-agri-primary to-agri-primary-light rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">B</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-lg font-bold text-agri-primary">
-                    BINDISA
-                  </span>
-                  <span className="text-xs text-agri-secondary">AGRITECH</span>
-                </div>
-              </div>
-            </div>
+            <img
+              src="/bindisa-agritech-logo.png"
+              alt="Bindisa Agritech"
+              className="h-10 w-auto object-contain"
+              onError={(e) => {
+                // Fallback to basic text if image fails to load
+                const target = e.target as HTMLImageElement;
+                target.style.display = "none";
+                const fallback = document.createElement("div");
+                fallback.className =
+                  "w-10 h-10 bg-agri-primary rounded-lg flex items-center justify-center";
+                fallback.innerHTML =
+                  '<span class="text-white font-bold text-lg">B</span>';
+                target.parentElement?.appendChild(fallback);
+              }}
+            />
           </Link>
 
           {/* Desktop Navigation */}

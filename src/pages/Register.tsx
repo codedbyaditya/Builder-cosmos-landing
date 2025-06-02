@@ -104,32 +104,30 @@ const Register: React.FC = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         {/* Logo */}
         <div className="flex justify-center mb-6">
-          <div className="h-16 w-auto flex items-center">
-            <img
-              src="/bindisa-logo.png"
-              alt="Bindisa Agritech"
-              className="h-16 w-auto object-contain"
-              onError={(e) => {
-                // Fallback to text logo if image fails to load
-                const target = e.target as HTMLImageElement;
-                target.style.display = "none";
-                target.nextElementSibling?.classList.remove("hidden");
-              }}
-            />
-            {/* Fallback text logo */}
-            <div className="hidden flex items-center space-x-3">
-              <div className="w-12 h-12 bg-agri-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">B</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-2xl font-bold text-agri-primary">
-                  Bindisa
-                </span>
-                <span className="text-sm text-agri-secondary">Agritech</span>
-              </div>
-            </div>
-          </div>
+          <img
+            src="/bindisa-agritech-logo.png"
+            alt="Bindisa Agritech"
+            className="h-16 w-auto object-contain"
+            onError={(e) => {
+              // Fallback to text logo if image fails to load
+              const target = e.target as HTMLImageElement;
+              target.style.display = "none";
+              const fallback = document.createElement("div");
+              fallback.className = "flex items-center space-x-3";
+              fallback.innerHTML = `
+                <div class="w-12 h-12 bg-agri-primary rounded-lg flex items-center justify-center">
+                  <span class="text-white font-bold text-xl">B</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-2xl font-bold text-agri-primary">Bindisa</span>
+                  <span class="text-sm text-agri-secondary">Agritech</span>
+                </div>
+              `;
+              target.parentElement?.appendChild(fallback);
+            }}
+          />
         </div>
+
         <Card className="card-agri">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold text-gray-900">

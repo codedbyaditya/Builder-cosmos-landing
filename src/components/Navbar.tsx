@@ -47,17 +47,24 @@ const Navbar: React.FC = () => {
               alt="Bindisa Agritech"
               className="h-10 w-auto object-contain"
               onError={(e) => {
-                // Fallback to basic text if image fails to load
+                // Fallback to responsive image if main logo fails to load
                 const target = e.target as HTMLImageElement;
                 target.style.display = "none";
-                const fallback = document.createElement("div");
-                fallback.className =
-                  "w-10 h-10 bg-agri-primary rounded-lg flex items-center justify-center";
-                fallback.innerHTML =
-                  '<span class="text-white font-bold text-lg">B</span>';
-                target.parentElement?.appendChild(fallback);
+                target.nextElementSibling?.classList.remove("hidden");
               }}
             />
+            {/* Enhanced fallback with responsive image */}
+            <div className="hidden flex items-center">
+              <img
+                loading="lazy"
+                srcSet="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F72c80f114dc149019051b6852a9e3b7a?width=100 100w, https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F72c80f114dc149019051b6852a9e3b7a?width=200 200w, https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F72c80f114dc149019051b6852a9e3b7a?width=400 400w, https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F72c80f114dc149019051b6852a9e3b7a?width=800 800w, https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F72c80f114dc149019051b6852a9e3b7a?width=1200 1200w, https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F72c80f114dc149019051b6852a9e3b7a?width=1600 1600w, https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F72c80f114dc149019051b6852a9e3b7a?width=2000 2000w, https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F72c80f114dc149019051b6852a9e3b7a"
+                src="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F72c80f114dc149019051b6852a9e3b7a"
+                alt="Bindisa Agritech Logo"
+                className="w-full ml-5 min-h-5 min-w-5 object-cover object-center overflow-hidden"
+                style={{ aspectRatio: "1.42" }}
+              />
+              <span className="text-white font-bold text-lg">B</span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

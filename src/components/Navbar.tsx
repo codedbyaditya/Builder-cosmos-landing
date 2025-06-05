@@ -61,16 +61,15 @@ const Navbar: React.FC = () => {
                 alt="Bindisa Agritech Logo"
                 className="object-cover object-center overflow-hidden min-w-5"
                 style={{
-                  aspectRatio: '1.42',
-                  height: '40px',
-                  minHeight: '67px',
-                  width: 'auto',
-                  flexGrow: '1',
-                  maxWidth: '500px',
-                  paddingBottom: '20px',
-                  margin: '0 20px'
+                  aspectRatio: "1.42",
+                  height: "40px",
+                  minHeight: "67px",
+                  width: "auto",
+                  flexGrow: "1",
+                  maxWidth: "500px",
+                  paddingBottom: "20px",
+                  margin: "0 20px",
                 }}
-              />
               />
               <img
                 src="/bindisa-agritech-logo.png"

@@ -59,8 +59,16 @@ const Navbar: React.FC = () => {
                 loading="lazy"
                 src="https://cdn.builder.io/api/v1/image/assets%2F740e0aee3e534c8a969cc741175154a3%2Fb42e486112e949778170c1a33850a089"
                 alt="Bindisa Agritech Logo"
-                className="h-10 w-auto ml-5 min-h-5 min-w-5 object-cover object-center overflow-hidden"
-                style={{ aspectRatio: "1.42" }}
+                className="object-cover object-center overflow-hidden flex-grow min-w-5 pb-5"
+                style={{
+                  aspectRatio: '1.42',
+                  height: '40px',
+                  minHeight: '67px',
+                  width: 'auto',
+                  maxWidth: '500px',
+                  margin: '0 20px'
+                }}
+              />
               />
               <img
                 src="/bindisa-agritech-logo.png"

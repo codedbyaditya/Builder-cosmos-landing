@@ -67,20 +67,32 @@ const Navbar: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
-                  isActive(item.path)
-                    ? "text-agri-primary bg-agri-accent"
-                    : "text-gray-700 hover:text-agri-primary hover:bg-agri-accent"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+          <div className="hidden md:flex items-center">
+            {navItems.map((item, index) => {
+              let marginClass = "";
+              // Apply specific margin classes based on the diff requirements
+              if (item.path === "/about" || item.path === "/team") {
+                marginClass = "mx-auto";
+              } else if (item.path === "/technology") {
+                marginClass = "mr-auto";
+              } else if (item.path === "/success-stories") {
+                marginClass = "ml-8";
+              }
+
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${marginClass} ${
+                    isActive(item.path)
+                      ? "text-agri-primary bg-agri-accent"
+                      : "text-gray-700 hover:text-agri-primary hover:bg-agri-accent"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Desktop Actions */}

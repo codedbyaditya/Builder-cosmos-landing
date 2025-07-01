@@ -126,28 +126,6 @@ const Hero: React.FC<HeroProps> = ({
             </div>
           )}
 
-          {/* Animated Stats Section */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 animate-fade-in-up delay-800">
-            {stats.map((stat, index) => {
-              const Icon = stat.icon;
-              return (
-                <div
-                  key={index}
-                  className="bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
-                  style={{
-                    animationDelay: `${index * 100}ms`,
-                  }}
-                >
-                  <Icon className="w-8 h-8 text-agri-primary mx-auto mb-3 group-hover:rotate-12 transition-transform duration-300" />
-                  <div className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-agri-primary transition-colors duration-300">
-                    {stat.value}
-                  </div>
-                  <div className="text-sm text-gray-600">{stat.label}</div>
-                </div>
-              );
-            })}
-          </div>
-
           {children && (
             <div className="mt-12 animate-fade-in-up delay-1000">
               {children}

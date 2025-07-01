@@ -186,8 +186,8 @@ const Hero: React.FC<HeroProps> = ({
           }}
         />
 
-        {/* Subtle overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-transparent to-black/20" />
+        {/* Very light overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/5 via-transparent to-black/10" />
       </div>
     </section>
   );

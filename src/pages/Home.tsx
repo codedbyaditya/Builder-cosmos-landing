@@ -125,16 +125,22 @@ const Home: React.FC = () => {
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
-              <div key={index} className="text-center">
+              <div
+                key={index}
+                className="text-center group cursor-pointer animate-fade-in-up hover:scale-105 transition-transform duration-300"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
                 <div
-                  className={`w-12 h-12 mx-auto mb-3 rounded-lg bg-white shadow-md flex items-center justify-center ${stat.color}`}
+                  className={`w-12 h-12 mx-auto mb-3 rounded-lg bg-white shadow-md flex items-center justify-center ${stat.color} group-hover:shadow-xl group-hover:scale-110 transition-all duration-300 group-hover:rotate-12`}
                 >
                   <Icon className="w-6 h-6" />
                 </div>
-                <div className="text-2xl font-bold text-gray-900">
+                <div className="text-2xl font-bold text-gray-900 group-hover:text-agri-primary transition-colors duration-300">
                   {stat.value}
                 </div>
-                <div className="text-sm text-gray-600">{stat.label}</div>
+                <div className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
+                  {stat.label}
+                </div>
               </div>
             );
           })}

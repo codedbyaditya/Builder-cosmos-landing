@@ -76,7 +76,7 @@ const Navbar: React.FC = () => {
               } else if (item.path === "/technology") {
                 marginClass = "mr-auto";
               } else if (item.path === "/success-stories") {
-                marginClass = "ml-8";
+                marginClass = "ml-3";
               }
 
               return (

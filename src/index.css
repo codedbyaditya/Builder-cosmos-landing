@@ -120,6 +120,10 @@
   animation: slide-in-left 0.8s ease-out forwards;
 }
 
+.animate-slide-in-top {
+  animation: slide-in-top 0.4s ease-out forwards;
+}
+
 .animate-scale-up {
   animation: scale-up 0.6s ease-out forwards;
 }

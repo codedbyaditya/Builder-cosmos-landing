@@ -59,8 +59,8 @@ const Navbar: React.FC = () => {
                 loading="lazy"
                 src="https://cdn.builder.io/api/v1/image/assets%2F740e0aee3e534c8a969cc741175154a3%2Fb42e486112e949778170c1a33850a089"
                 alt="Bindisa Agritech Logo"
-                className="w-full min-w-5 object-cover object-center overflow-hidden pb-6 mr-auto flex-grow"
-                style={{ aspectRatio: "1.42" }}
+                className="min-w-5 object-cover object-center overflow-hidden pb-6 mr-auto flex-grow h-25"
+                style={{ aspectRatio: "1.42", height: "100px" }}
               />
               <span className="text-white font-bold text-lg">B</span>
             </div>

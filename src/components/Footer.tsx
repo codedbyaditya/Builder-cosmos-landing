@@ -90,10 +90,12 @@ const Footer: React.FC = () => {
                   <a
                     key={index}
                     href={social.href}
-                    className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-agri-primary transition-colors duration-300"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-agri-primary transition-all duration-300 hover:scale-110 hover:rotate-12 hover:shadow-lg group"
                     aria-label={social.label}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
                   </a>
                 );
               })}

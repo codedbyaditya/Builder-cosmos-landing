@@ -170,12 +170,12 @@ const Navbar: React.FC = () => {
               variant="ghost"
               size="sm"
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2"
+              className="p-2 hover:scale-110 transition-all duration-300 hover:shadow-md"
             >
               {isOpen ? (
-                <X className="w-6 h-6" />
+                <X className="w-6 h-6 rotate-180 transition-transform duration-300" />
               ) : (
-                <Menu className="w-6 h-6" />
+                <Menu className="w-6 h-6 hover:rotate-12 transition-transform duration-300" />
               )}
             </Button>
           </div>

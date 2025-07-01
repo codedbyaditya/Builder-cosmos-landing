@@ -51,10 +51,10 @@ const Hero: React.FC<HeroProps> = ({
   }, []);
 
   const stats = [
-    { icon: Users, value: "1000+", label: "Happy Farmers" },
-    { icon: Leaf, value: "500+", label: "Crops Analyzed" },
-    { icon: Target, value: "95%", label: "Accuracy Rate" },
-    { icon: Award, value: "5+", label: "Awards Won" },
+    { icon: Users, value: "1000+", label: "Farmers Empowered" },
+    { icon: TrendingUp, value: "45%", label: "Yield Improvement" },
+    { icon: Leaf, value: "15+", label: "Crops Supported" },
+    { icon: Award, value: "5+", label: "Recognition" },
   ];
 
   return (

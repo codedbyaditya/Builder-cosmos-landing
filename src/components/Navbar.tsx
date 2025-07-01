@@ -183,18 +183,19 @@ const Navbar: React.FC = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t">
+          <div className="md:hidden py-4 border-t animate-slide-in-top">
             <div className="flex flex-col space-y-2">
-              {navItems.map((item) => (
+              {navItems.map((item, index) => (
                 <Link
                   key={item.path}
                   to={item.path}
                   onClick={() => setIsOpen(false)}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-md animate-fade-in-up ${
                     isActive(item.path)
-                      ? "text-agri-primary bg-agri-accent"
+                      ? "text-agri-primary bg-agri-accent shadow-md"
                       : "text-gray-700 hover:text-agri-primary hover:bg-agri-accent"
                   }`}
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   {item.label}
                 </Link>

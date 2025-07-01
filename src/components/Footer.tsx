@@ -25,11 +25,31 @@ const Footer: React.FC = () => {
   ];
 
   const socialLinks = [
-    { icon: Facebook, href: "#", label: "Facebook" },
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Instagram, href: "#", label: "Instagram" },
-    { icon: Youtube, href: "#", label: "YouTube" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
+    {
+      icon: Facebook,
+      href: "https://www.facebook.com/bindisaagritech",
+      label: "Facebook",
+    },
+    {
+      icon: Twitter,
+      href: "https://twitter.com/bindisaagritech",
+      label: "Twitter",
+    },
+    {
+      icon: Instagram,
+      href: "https://www.instagram.com/bindisaagritech/",
+      label: "Instagram",
+    },
+    {
+      icon: Youtube,
+      href: "https://www.youtube.com/@bindisaagritech",
+      label: "YouTube",
+    },
+    {
+      icon: Linkedin,
+      href: "https://www.linkedin.com/company/bindisa-agritech-pvt-ltd/",
+      label: "LinkedIn",
+    },
   ];
 
   return (

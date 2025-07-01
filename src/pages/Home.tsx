@@ -111,6 +111,7 @@ const Home: React.FC = () => {
         title={t("hero.tagline")}
         subtitle={t("hero.subtitle")}
         description={t("hero.description")}
+        backgroundImage="https://cdn.builder.io/api/v1/image/assets%2F740e0aee3e534c8a969cc741175154a3%2Fc030090dd9fc4e6bbf8e7d5fac09eb80?format=webp&width=800"
         primaryAction={{
           text: t("hero.cta"),
           onClick: () => navigate("/about"),

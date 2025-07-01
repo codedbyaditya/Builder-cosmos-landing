@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { ChevronDown, Leaf, Target, Users, Award } from "lucide-react";
+import {
+  ChevronDown,
+  Leaf,
+  Target,
+  Users,
+  Award,
+  TrendingUp,
+} from "lucide-react";
 
 interface HeroProps {
   title: string;

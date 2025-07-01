@@ -83,13 +83,14 @@ const Navbar: React.FC = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${marginClass} ${
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-md relative group ${marginClass} ${
                     isActive(item.path)
-                      ? "text-agri-primary bg-agri-accent"
+                      ? "text-agri-primary bg-agri-accent shadow-md"
                       : "text-gray-700 hover:text-agri-primary hover:bg-agri-accent"
                   }`}
                 >
-                  {item.label}
+                  <span className="relative z-10">{item.label}</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-agri-primary/10 to-agri-secondary/10 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
               );
             })}

@@ -148,55 +148,78 @@ const Home: React.FC = () => {
       </Hero>
 
       {/* About Bindisa Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white overflow-hidden">
         <div className="container-max section-padding">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-slide-in-left">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 hover:text-agri-primary transition-colors duration-300">
                 Who We Are
               </h2>
-              <p className="text-lg text-gray-600 mb-6">
+              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
                 Bindisa Agritech is more than just a company—it's a vision built
                 on family values, innovation, and impact. The name "Bindisa" is
                 inspired by the names of our founder's loved ones:
               </p>
               <div className="flex items-center space-x-4 mb-6">
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                  <span className="font-semibold">BINdi</span>
+                <div className="flex items-center space-x-2 group cursor-pointer">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse group-hover:scale-150 transition-transform duration-300"></div>
+                  <span className="font-semibold group-hover:text-blue-500 transition-colors duration-300">
+                    BINdi
+                  </span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span className="font-semibold">DIpa</span>
+                <div className="flex items-center space-x-2 group cursor-pointer">
+                  <div
+                    className="w-3 h-3 bg-green-500 rounded-full animate-pulse group-hover:scale-150 transition-transform duration-300"
+                    style={{ animationDelay: "0.5s" }}
+                  ></div>
+                  <span className="font-semibold group-hover:text-green-500 transition-colors duration-300">
+                    DIpa
+                  </span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                  <span className="font-semibold">SAntosh</span>
+                <div className="flex items-center space-x-2 group cursor-pointer">
+                  <div
+                    className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse group-hover:scale-150 transition-transform duration-300"
+                    style={{ animationDelay: "1s" }}
+                  ></div>
+                  <span className="font-semibold group-hover:text-yellow-500 transition-colors duration-300">
+                    SAntosh
+                  </span>
                 </div>
               </div>
-              <p className="text-gray-600 mb-8">
+              <p className="text-gray-600 mb-8 leading-relaxed">
                 This legacy reminds us that agriculture is not just about
                 technology; it's about people, communities, and a shared future.
               </p>
               <Button
                 onClick={() => navigate("/about")}
-                className="btn-agri-primary"
+                className="btn-agri-primary hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group"
               >
-                Learn More About Us <ArrowRight className="w-4 h-4 ml-2" />
+                <span className="group-hover:translate-x-1 transition-transform duration-200">
+                  Learn More About Us
+                </span>
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
               </Button>
             </div>
-            <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-agri-primary/20 to-agri-secondary/20 rounded-2xl flex items-center justify-center">
+            <div className="relative animate-slide-in-right">
+              <div className="aspect-square bg-gradient-to-br from-agri-primary/20 to-agri-secondary/20 rounded-2xl flex items-center justify-center hover:scale-105 transition-all duration-500 group cursor-pointer">
                 <div className="text-center p-8">
-                  <div className="w-24 h-24 bg-agri-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Sprout className="w-12 h-12 text-white" />
+                  <div className="w-24 h-24 bg-agri-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 shadow-lg group-hover:shadow-xl">
+                    <Sprout className="w-12 h-12 text-white group-hover:scale-110 transition-transform duration-300" />
                   </div>
-                  <h3 className="text-xl font-bold text-agri-primary mb-2">
+                  <h3 className="text-xl font-bold text-agri-primary mb-2 group-hover:text-agri-secondary transition-colors duration-300">
                     Our Mission
                   </h3>
-                  <p className="text-gray-600">INNOVATE. CULTIVATE. ELEVATE.</p>
+                  <p className="text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
+                    INNOVATE. CULTIVATE. ELEVATE.
+                  </p>
                 </div>
               </div>
+              {/* Floating elements */}
+              <div className="absolute -top-4 -right-4 w-8 h-8 bg-agri-primary/20 rounded-full animate-float"></div>
+              <div
+                className="absolute -bottom-4 -left-4 w-6 h-6 bg-agri-secondary/20 rounded-full animate-float"
+                style={{ animationDelay: "1s" }}
+              ></div>
             </div>
           </div>
         </div>

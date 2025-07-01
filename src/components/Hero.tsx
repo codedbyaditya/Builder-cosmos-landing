@@ -63,7 +63,7 @@ const Hero: React.FC<HeroProps> = ({
       style={
         backgroundImage
           ? {
-              backgroundImage: `linear-gradient(135deg, rgba(22, 163, 74, 0.9) 0%, rgba(34, 197, 94, 0.8) 100%), url(${backgroundImage})`,
+              backgroundImage: `url(${backgroundImage})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }

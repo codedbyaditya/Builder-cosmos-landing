@@ -91,7 +91,7 @@ const SoilAnalysis: React.FC = () => {
     } else if (data.moisture > 80) {
       result.moisture = {
         status: "warning",
-        message: "मिट्टी में अधिक नमी है। ���ल निकासी सुधारें।",
+        message: "मिट्टी में अधिक नमी है। जल निकासी सुधारें।",
       };
     } else {
       result.moisture = {
@@ -104,7 +104,7 @@ const SoilAnalysis: React.FC = () => {
     if (data.nitrogen < 30) {
       result.nitrogen = {
         status: "critical",
-        message: "नाइट्रोजन की कमी है। यूरिया का प्रयोग करें।",
+        message: "न���इट्रोजन की कमी है। यूरिया का प्रयोग करें।",
       };
     } else if (data.nitrogen > 80) {
       result.nitrogen = {
@@ -164,7 +164,7 @@ const SoilAnalysis: React.FC = () => {
 
     // General Recommendations
     result.recommendations = [
-      "नियमित म���ट्टी परीक्षण कराएं",
+      "नियमित मिट्टी परीक्षण कराएं",
       "जैविक खाद का प्रयोग बढ़ाएं",
       "फसल चक्र अपनाएं",
       "मिट्टी में कार्बनिक पदार्थ बढ़ाएं",
@@ -302,10 +302,10 @@ const SoilAnalysis: React.FC = () => {
 
             <div className="grid lg:grid-cols-2 gap-8">
               {/* Input Panel */}
-              <Card className="card-agri">
-                <CardHeader>
+              <Card className="bg-white shadow-xl border-0 hover:shadow-2xl transition-all duration-300">
+                <CardHeader className="bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-t-lg">
                   <CardTitle className="flex items-center space-x-2">
-                    <Beaker className="w-5 h-5 text-agri-primary" />
+                    <Beaker className="w-5 h-5 text-white" />
                     <span>Soil Parameters</span>
                   </CardTitle>
                 </CardHeader>

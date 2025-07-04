@@ -79,7 +79,7 @@ const SoilAnalysis: React.FC = () => {
         message: "मिट्टी क्षारीय है। गंधक या जिप्सम डालें।",
       };
     } else {
-      result.ph = { status: "good", message: "मिट्टी का pH आदर्श ह���।" };
+      result.ph = { status: "good", message: "मिट्टी का pH आदर्श है।" };
     }
 
     // Moisture Analysis
@@ -91,7 +91,7 @@ const SoilAnalysis: React.FC = () => {
     } else if (data.moisture > 80) {
       result.moisture = {
         status: "warning",
-        message: "मिट्टी में अधिक नमी है। जल निकासी सुधारें।",
+        message: "मिट्टी में अधिक नमी है। ���ल निकासी सुधारें।",
       };
     } else {
       result.moisture = {
@@ -114,7 +114,7 @@ const SoilAnalysis: React.FC = () => {
     } else {
       result.nitrogen = {
         status: "good",
-        message: "नाइट्रोजन का स्तर उच���त है।",
+        message: "नाइट्रोजन का स्तर उचित है।",
       };
     }
 
@@ -164,7 +164,7 @@ const SoilAnalysis: React.FC = () => {
 
     // General Recommendations
     result.recommendations = [
-      "नियमित मिट्टी परीक्षण कराएं",
+      "नियमित म���ट्टी परीक्षण कराएं",
       "जैविक खाद का प्रयोग बढ़ाएं",
       "फसल चक्र अपनाएं",
       "मिट्टी में कार्बनिक पदार्थ बढ़ाएं",
@@ -284,14 +284,17 @@ const SoilAnalysis: React.FC = () => {
       </section>
 
       {/* Analysis Tool */}
-      <section id="analysis-tool" className="py-20 bg-gray-50">
+      <section
+        id="analysis-tool"
+        className="py-20 bg-gradient-to-br from-gray-50 to-green-50"
+      >
         <div className="container-max section-padding">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Soil Analysis Tool
               </h2>
-              <p className="text-lg text-gray-600">
+              <p className="text-lg text-gray-700">
                 Enter your soil parameters below to get instant analysis and
                 recommendations.
               </p>

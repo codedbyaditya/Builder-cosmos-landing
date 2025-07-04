@@ -79,7 +79,7 @@ const SoilAnalysis: React.FC = () => {
         message: "मिट्टी क्षारीय है। गंधक या जिप्सम डालें।",
       };
     } else {
-      result.ph = { status: "good", message: "मिट्टी का pH आदर्श है।" };
+      result.ph = { status: "good", message: "मिट्टी का pH आदर्श ह���।" };
     }
 
     // Moisture Analysis
@@ -114,7 +114,7 @@ const SoilAnalysis: React.FC = () => {
     } else {
       result.nitrogen = {
         status: "good",
-        message: "नाइट्रोजन का स्तर उचित है।",
+        message: "नाइट्रोजन का स्तर उच���त है।",
       };
     }
 
@@ -122,7 +122,7 @@ const SoilAnalysis: React.FC = () => {
     if (data.phosphorus < 25) {
       result.phosphorus = {
         status: "critical",
-        message: "फास्फोरस की कमी है। DAP उर्��रक डालें।",
+        message: "फास्फोरस की कमी है। DAP उर्वरक डालें।",
       };
     } else if (data.phosphorus > 70) {
       result.phosphorus = { status: "warning", message: "फास्फोरस अधिक है।" };
@@ -235,8 +235,10 @@ const SoilAnalysis: React.FC = () => {
           </div>
 
           <div className="grid md:grid-cols-4 gap-6 text-center">
-            <div>
-              <TrendingUp className="w-8 h-8 text-agri-primary mx-auto mb-3" />
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200 transition-colors duration-300">
+                <TrendingUp className="w-6 h-6 text-green-600" />
+              </div>
               <h3 className="font-semibold text-gray-900 mb-2">
                 Increase Yields
               </h3>
@@ -244,8 +246,10 @@ const SoilAnalysis: React.FC = () => {
                 Optimize nutrient levels for maximum crop productivity
               </p>
             </div>
-            <div>
-              <Droplets className="w-8 h-8 text-blue-600 mx-auto mb-3" />
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors duration-300">
+                <Droplets className="w-6 h-6 text-blue-600" />
+              </div>
               <h3 className="font-semibold text-gray-900 mb-2">
                 Water Efficiency
               </h3>
@@ -253,8 +257,10 @@ const SoilAnalysis: React.FC = () => {
                 Understand moisture needs and irrigation requirements
               </p>
             </div>
-            <div>
-              <Leaf className="w-8 h-8 text-green-600 mx-auto mb-3" />
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+              <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-emerald-200 transition-colors duration-300">
+                <Leaf className="w-6 h-6 text-emerald-600" />
+              </div>
               <h3 className="font-semibold text-gray-900 mb-2">
                 Crop Selection
               </h3>
@@ -262,8 +268,10 @@ const SoilAnalysis: React.FC = () => {
                 Choose the right crops for your soil conditions
               </p>
             </div>
-            <div>
-              <Zap className="w-8 h-8 text-yellow-600 mx-auto mb-3" />
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+              <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-yellow-200 transition-colors duration-300">
+                <Zap className="w-6 h-6 text-yellow-600" />
+              </div>
               <h3 className="font-semibold text-gray-900 mb-2">
                 Cost Reduction
               </h3>

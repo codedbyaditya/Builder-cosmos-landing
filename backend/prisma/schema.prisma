@@ -1,0 +1,263 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  AGENT
+  ADMIN
+}
+
+enum Language {
+  EN
+  HI
+  MR
+}
+
+enum SoilType {
+  CLAY
+  SANDY
+  LOAMY
+  SILTY
+  PEATY
+  CHALKY
+}
+
+enum Season {
+  KHARIF
+  RABI
+  SUMMER
+  PERENNIAL
+}
+
+enum AnalysisStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  VERIFIED
+}
+
+model User {
+  id                    String   @id @default(uuid())
+  name                  String
+  email                 String   @unique
+  password              String
+  phone                 String?
+  role                  UserRole @default(USER)
+  language              Language @default(EN)
+  avatar                String?
+  isEmailVerified       Boolean  @default(false)
+  emailVerificationToken String?
+  passwordResetToken    String?
+  passwordResetExpires  DateTime?
+  lastLogin             DateTime?
+  isActive              Boolean  @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  soilAnalyses          SoilAnalysis[]
+  cropRecommendations   CropRecommendation[]
+  chatSessions          ChatSession[]
+  contactSubmissions    ContactSubmission[]
+  farmProfile           FarmProfile?
+
+  @@map("users")
+}
+
+model FarmProfile {
+  id             String  @id @default(uuid())
+  userId         String  @unique
+  farmName       String?
+  farmSize       Float?  // in acres
+  location       String?
+  coordinates    String? // JSON string for lat,lng
+  soilType       SoilType?
+  irrigationType String?
+  mainCrops      String[] // Array of crop names
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("farm_profiles")
+}
+
+model SoilAnalysis {
+  id                String         @id @default(uuid())
+  userId            String
+  sampleId          String         @unique
+  location          String
+  coordinates       String?        // JSON string for lat,lng
+  soilType          SoilType?
+  phLevel           Float?
+  organicMatter     Float?
+  nitrogen          Float?
+  phosphorus        Float?
+  potassium         Float?
+  calcium           Float?
+  magnesium         Float?
+  sulfur            Float?
+  iron              Float?
+  zinc              Float?
+  copper            Float?
+  manganese         Float?
+  boron             Float?
+  moistureContent   Float?
+  electricalConductivity Float?
+  healthScore       Int?           // 0-100
+  resultData        Json?          // Complete analysis data
+  recommendations   String?        // AI generated recommendations
+  status            AnalysisStatus @default(PENDING)
+  analyzedBy        String?        // Agent/Admin who analyzed
+  analyzedAt        DateTime?
+  reportUrl         String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  // Relations
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cropRecommendations CropRecommendation[]
+
+  @@map("soil_analyses")
+}
+
+model CropRecommendation {
+  id               String    @id @default(uuid())
+  userId           String
+  soilAnalysisId   String?
+  season           Season
+  cropName         String
+  variety          String?
+  plantingDate     DateTime?
+  harvestDate      DateTime?
+  expectedYield    Float?
+  suggestionDetails Json?    // Detailed recommendations
+  fertilizers      Json?     // Fertilizer recommendations
+  pesticides       Json?     // Pest control recommendations
+  irrigationPlan   Json?     // Irrigation schedule
+  marketPrice      Float?    // Current market price
+  profitEstimate   Float?    // Estimated profit
+  riskFactors      String[]  // Risk assessment
+  createdBy        String?   // Agent/Admin who created
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  // Relations
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  soilAnalysis SoilAnalysis? @relation(fields: [soilAnalysisId], references: [id])
+
+  @@map("crop_recommendations")
+}
+
+model TeamMember {
+  id          String   @id @default(uuid())
+  name        String
+  designation String
+  photoUrl    String?
+  bio         String?
+  email       String?
+  phone       String?
+  linkedin    String?
+  twitter     String?
+  language    Language @default(EN)
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("team_members")
+}
+
+model ContactSubmission {
+  id        String   @id @default(uuid())
+  userId    String?
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  location  String?
+  farmSize  String?
+  cropTypes String?
+  isRead    Boolean  @default(false)
+  repliedAt DateTime?
+  repliedBy String?
+  replyMessage String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("contact_submissions")
+}
+
+model ChatSession {
+  id           String        @id @default(uuid())
+  userId       String
+  sessionId    String        @unique
+  title        String?
+  topic        String        @default("general")
+  isActive     Boolean       @default(true)
+  lastActivity DateTime      @default(now())
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  // Relations
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages ChatMessage[]
+
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id           String      @id @default(uuid())
+  sessionId    String
+  role         String      // 'user' | 'assistant' | 'system'
+  content      String
+  timestamp    DateTime    @default(now())
+  tokens       Int?        // Token count for OpenAI
+  model        String?     // GPT model used
+  isRead       Boolean     @default(false)
+  metadata     Json?       // Additional metadata
+
+  // Relations
+  session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("chat_messages")
+}
+
+model SystemSettings {
+  id    String @id @default(uuid())
+  key   String @unique
+  value String
+  description String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("system_settings")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String   // CREATE, UPDATE, DELETE, LOGIN, etc.
+  resource  String   // users, soil_analyses, etc.
+  resourceId String?
+  details   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@map("audit_logs")
+}

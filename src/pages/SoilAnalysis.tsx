@@ -552,9 +552,9 @@ const SoilAnalysis: React.FC = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-blue-600 font-bold text-xl">1</span>
+            <div className="text-center bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-white font-bold text-xl">1</span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">
                 Data Collection
@@ -565,9 +565,9 @@ const SoilAnalysis: React.FC = () => {
               </p>
             </div>
 
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-green-600 font-bold text-xl">2</span>
+            <div className="text-center bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-white font-bold text-xl">2</span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">
                 AI Analysis
@@ -578,9 +578,9 @@ const SoilAnalysis: React.FC = () => {
               </p>
             </div>
 
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-purple-600 font-bold text-xl">3</span>
+            <div className="text-center bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-white font-bold text-xl">3</span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">
                 Recommendations

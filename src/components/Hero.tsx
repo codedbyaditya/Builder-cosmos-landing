@@ -95,7 +95,7 @@ const Hero: React.FC<HeroProps> = ({
           </h1>
 
           {description && (
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto animate-fade-in-up delay-400 leading-relaxed">
+            <p className="text-xl text-white mb-8 max-w-3xl mx-auto animate-fade-in-up delay-400 leading-relaxed">
               {description}
             </p>
           )}

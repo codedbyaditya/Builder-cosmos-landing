@@ -169,8 +169,8 @@ const Chatbot: React.FC = () => {
       },
       ...prev.slice(1),
     ]);
-    // Clear chat history when language changes
-    chatbotService.clearHistory(sessionId);
+    // Clear chat session when language changes
+    chatbotService.clearSession();
   }, [language, sessionId]);
 
   return (

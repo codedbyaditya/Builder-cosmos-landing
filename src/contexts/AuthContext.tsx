@@ -5,6 +5,9 @@ interface User {
   name: string;
   email: string;
   phone?: string;
+  role?: "user" | "admin" | "agent";
+  avatar?: string;
+  provider?: "email" | "google";
 }
 
 interface AuthContextType {
@@ -12,7 +15,9 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   register: (userData: RegisterData) => Promise<boolean>;
   logout: () => void;
+  setUser: (user: User) => void;
   isLoading: boolean;
+  isAuthenticated: boolean;
 }
 
 interface RegisterData {
@@ -98,10 +103,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const logout = () => {
     setUser(null);
     localStorage.removeItem("bindisa-user");
+    localStorage.removeItem("google_user");
+    localStorage.removeItem("google_token");
+  };
+
+  const setUserDirectly = (user: User) => {
+    setUser(user);
+    localStorage.setItem("bindisa-user", JSON.stringify(user));
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        register,
+        logout,
+        setUser: setUserDirectly,
+        isLoading,
+        isAuthenticated: !!user,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

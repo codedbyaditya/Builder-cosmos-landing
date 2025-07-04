@@ -104,7 +104,7 @@ const SoilAnalysis: React.FC = () => {
     if (data.nitrogen < 30) {
       result.nitrogen = {
         status: "critical",
-        message: "���ाइट्रोजन की कमी है। यूरिया का प्रयोग करें।",
+        message: "नाइट्रोजन की कमी है। यूरिया का प्रयोग करें।",
       };
     } else if (data.nitrogen > 80) {
       result.nitrogen = {
@@ -539,13 +539,13 @@ const SoilAnalysis: React.FC = () => {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gradient-to-br from-white to-gray-50">
         <div className="container-max section-padding">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               How Our Soil Analysis Works
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
               Our AI-powered analysis considers multiple factors to provide
               accurate recommendations.
             </p>

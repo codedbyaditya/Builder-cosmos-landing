@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import { GoogleAuthProvider } from "./contexts/GoogleAuthContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
@@ -24,33 +25,35 @@ import NotFound from "./pages/NotFound";
 function App() {
   return (
     <LanguageProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <div className="min-h-screen flex flex-col">
-            <Navbar />
-            <main className="flex-1">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/team" element={<Team />} />
-                <Route path="/technology" element={<Technology />} />
-                <Route path="/success-stories" element={<SuccessStories />} />
-                <Route path="/soil-analysis" element={<SoilAnalysis />} />
-                <Route path="/chatbot" element={<Chatbot />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/location" element={<Location />} />
-                <Route path="/achievements" element={<Achievements />} />
-                <Route path="/farmer-help" element={<FarmerHelp />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
-        </BrowserRouter>
-      </AuthProvider>
+      <GoogleAuthProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <div className="min-h-screen flex flex-col">
+              <Navbar />
+              <main className="flex-1">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/team" element={<Team />} />
+                  <Route path="/technology" element={<Technology />} />
+                  <Route path="/success-stories" element={<SuccessStories />} />
+                  <Route path="/soil-analysis" element={<SoilAnalysis />} />
+                  <Route path="/chatbot" element={<Chatbot />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/location" element={<Location />} />
+                  <Route path="/achievements" element={<Achievements />} />
+                  <Route path="/farmer-help" element={<FarmerHelp />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
+              <Footer />
+            </div>
+          </BrowserRouter>
+        </AuthProvider>
+      </GoogleAuthProvider>
     </LanguageProvider>
   );
 }

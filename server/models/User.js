@@ -1,92 +1,108 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import validator from "validator";
 
 const userSchema = new mongoose.Schema(
   {
+    // Basic Information
     name: {
       type: String,
-      required: [true, "Name is required"],
+      required: true,
       trim: true,
-      maxlength: [50, "Name cannot exceed 50 characters"],
+      maxlength: 50,
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
+      required: true,
       unique: true,
       lowercase: true,
-      validate: [validator.isEmail, "Please provide a valid email"],
+      trim: true,
       index: true,
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
-      minlength: [6, "Password must be at least 6 characters"],
-      select: false, // Don't include password in queries by default
+      minlength: 6,
+      // Not required for Google OAuth users
+    },
+    phone: {
+      type: String,
+      trim: true,
+      sparse: true,
+    },
+
+    // OAuth Information
+    googleId: {
+      type: String,
+      sparse: true,
+      unique: true,
+    },
+    provider: {
+      type: String,
+      enum: ["email", "google"],
+      default: "email",
+    },
+
+    // Profile Information
+    avatar: {
+      type: String,
+      default: null,
     },
     role: {
       type: String,
-      enum: {
-        values: ["user", "farmer", "expert", "admin"],
-        message: "Role must be either user, farmer, expert, or admin",
-      },
+      enum: ["user", "agent", "admin"],
       default: "user",
+      index: true,
     },
-    avatar: {
-      public_id: String,
-      url: {
+    isActive: {
+      type: Boolean,
+      default: true,
+      index: true,
+    },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    // Detailed Profile
+    profile: {
+      firstName: String,
+      lastName: String,
+      dateOfBirth: Date,
+      gender: {
         type: String,
-        default: "/avatar/default.png",
+        enum: ["male", "female", "other"],
       },
-    },
-    phoneNumber: {
-      type: String,
-      validate: {
-        validator: function (v) {
-          return !v || validator.isMobilePhone(v, "en-IN");
-        },
-        message: "Please provide a valid phone number",
-      },
-    },
-    address: {
-      street: String,
-      city: String,
-      state: String,
-      postalCode: String,
-      country: {
-        type: String,
-        default: "India",
-      },
-    },
-    farmDetails: {
-      farmName: String,
-      farmSize: {
-        value: Number,
-        unit: {
+      location: {
+        address: String,
+        city: String,
+        state: String,
+        country: {
           type: String,
-          enum: ["acres", "hectares", "square_meters"],
-          default: "acres",
+          default: "India",
+        },
+        pincode: String,
+        coordinates: {
+          type: [Number], // [longitude, latitude]
+          index: "2dsphere",
         },
       },
-      cropTypes: [
-        {
-          name: String,
-          season: {
-            type: String,
-            enum: ["kharif", "rabi", "summer", "perennial"],
-          },
-        },
-      ],
-      soilType: {
+      occupation: {
         type: String,
-        enum: ["clay", "sandy", "loamy", "silty", "peaty", "chalky"],
+        enum: [
+          "farmer",
+          "agricultural_expert",
+          "researcher",
+          "student",
+          "other",
+        ],
+        default: "farmer",
       },
-      irrigationType: {
-        type: String,
-        enum: ["drip", "sprinkler", "flood", "manual", "rainfed"],
+      farmSize: {
+        type: Number, // in acres
+        min: 0,
       },
     },
+
+    // Preferences
     preferences: {
       language: {
         type: String,
@@ -107,224 +123,200 @@ const userSchema = new mongoose.Schema(
           default: true,
         },
       },
-      units: {
-        temperature: {
-          type: String,
-          enum: ["celsius", "fahrenheit"],
-          default: "celsius",
-        },
-        measurement: {
-          type: String,
-          enum: ["metric", "imperial"],
-          default: "metric",
-        },
+      theme: {
+        type: String,
+        enum: ["light", "dark", "auto"],
+        default: "light",
       },
     },
-    emailVerified: {
-      type: Boolean,
-      default: false,
-    },
-    emailVerificationToken: String,
-    emailVerificationExpires: Date,
-    passwordResetToken: String,
-    passwordResetExpires: Date,
-    lastLogin: Date,
-    loginAttempts: {
-      type: Number,
-      default: 0,
-    },
-    lockUntil: Date,
-    refreshTokens: [
-      {
-        token: String,
-        createdAt: {
-          type: Date,
-          default: Date.now,
-        },
-        expiresAt: Date,
-      },
-    ],
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
+
+    // Subscription & Usage
     subscription: {
       plan: {
         type: String,
         enum: ["free", "basic", "premium", "enterprise"],
         default: "free",
       },
+      status: {
+        type: String,
+        enum: ["active", "inactive", "cancelled", "expired"],
+        default: "active",
+      },
       startDate: Date,
       endDate: Date,
-      features: [String],
+      autoRenew: {
+        type: Boolean,
+        default: false,
+      },
     },
+
+    usage: {
+      chatMessages: {
+        type: Number,
+        default: 0,
+      },
+      soilAnalysis: {
+        type: Number,
+        default: 0,
+      },
+      fileUploads: {
+        type: Number,
+        default: 0,
+      },
+      lastReset: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+
+    // Security
+    lastLogin: Date,
+    loginCount: {
+      type: Number,
+      default: 0,
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
+    emailVerificationToken: String,
+    emailVerificationExpires: Date,
+
+    // Metadata
+    registrationSource: {
+      type: String,
+      enum: ["web", "mobile", "api"],
+      default: "web",
+    },
+    referredBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    notes: [
+      {
+        content: String,
+        author: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+        timestamp: {
+          type: Date,
+          default: Date.now,
+        },
+        isPrivate: {
+          type: Boolean,
+          default: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
+    collection: "users",
   },
 );
 
-// Indexes for better performance
-userSchema.index({ email: 1 });
-userSchema.index({ role: 1 });
-userSchema.index({ "farmDetails.soilType": 1 });
-userSchema.index({ createdAt: -1 });
+// Indexes for performance
+userSchema.index({ email: 1, isActive: 1 });
+userSchema.index({ role: 1, isActive: 1 });
+userSchema.index({ "profile.location.coordinates": "2dsphere" });
+userSchema.index({ googleId: 1 }, { sparse: true });
+userSchema.index({ resetPasswordToken: 1 }, { sparse: true });
+userSchema.index({ emailVerificationToken: 1 }, { sparse: true });
 
-// Virtual for user's full address
-userSchema.virtual("fullAddress").get(function () {
-  if (!this.address) return "";
-  const { street, city, state, postalCode, country } = this.address;
-  return [street, city, state, postalCode, country].filter(Boolean).join(", ");
+// Virtual for full name
+userSchema.virtual("fullName").get(function () {
+  if (this.profile?.firstName && this.profile?.lastName) {
+    return `${this.profile.firstName} ${this.profile.lastName}`;
+  }
+  return this.name;
 });
 
-// Virtual for account lock status
-userSchema.virtual("isLocked").get(function () {
-  return !!(this.lockUntil && this.lockUntil > Date.now());
-});
-
-// Pre-save middleware to hash password
+// Pre-save middleware
 userSchema.pre("save", async function (next) {
-  // Only hash the password if it has been modified (or is new)
-  if (!this.isModified("password")) return next();
-
-  try {
-    // Hash password with cost of 12
-    const salt = await bcrypt.genSalt(12);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
+  // Hash password only if it's modified and exists
+  if (this.isModified("password") && this.password) {
+    const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS) || 12;
+    this.password = await bcrypt.hash(this.password, saltRounds);
   }
-});
 
-// Pre-save middleware to handle login attempts
-userSchema.pre("save", function (next) {
-  // If account is not currently locked and we have login attempts, remove them
-  if (this.loginAttempts && !this.isLocked) {
-    this.loginAttempts = undefined;
-    this.lockUntil = undefined;
+  // Set email verification for Google users
+  if (this.provider === "google" && !this.isEmailVerified) {
+    this.isEmailVerified = true;
   }
+
   next();
 });
 
-// Instance method to check password
+// Instance methods
 userSchema.methods.comparePassword = async function (candidatePassword) {
-  if (!this.password) return false;
-  return await bcrypt.compare(candidatePassword, this.password);
-};
-
-// Instance method to generate JWT access token
-userSchema.methods.generateAccessToken = function () {
-  return jwt.sign(
-    {
-      id: this._id,
-      email: this.email,
-      role: this.role,
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: process.env.JWT_EXPIRES_IN || "7d",
-    },
-  );
-};
-
-// Instance method to generate JWT refresh token
-userSchema.methods.generateRefreshToken = function () {
-  const refreshToken = jwt.sign(
-    { id: this._id },
-    process.env.JWT_REFRESH_SECRET,
-    {
-      expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "30d",
-    },
-  );
-
-  // Store refresh token in database
-  this.refreshTokens.push({
-    token: refreshToken,
-    expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
-  });
-
-  return refreshToken;
-};
-
-// Instance method to remove refresh token
-userSchema.methods.removeRefreshToken = function (token) {
-  this.refreshTokens = this.refreshTokens.filter((t) => t.token !== token);
-};
-
-// Instance method to clean expired refresh tokens
-userSchema.methods.cleanExpiredTokens = function () {
-  this.refreshTokens = this.refreshTokens.filter(
-    (token) => token.expiresAt > new Date(),
-  );
-};
-
-// Instance method to handle failed login attempts
-userSchema.methods.incLoginAttempts = function () {
-  const maxAttempts = 5;
-  const lockTime = 2 * 60 * 60 * 1000; // 2 hours
-
-  // If we have a previous lock that has expired, restart at 1
-  if (this.lockUntil && this.lockUntil < Date.now()) {
-    return this.updateOne({
-      $unset: {
-        loginAttempts: 1,
-        lockUntil: 1,
-      },
-    });
+  if (!this.password) {
+    return false; // Google OAuth users don't have passwords
   }
-
-  const updates = { $inc: { loginAttempts: 1 } };
-
-  // If we hit max attempts and it's not locked yet, lock it
-  if (this.loginAttempts + 1 >= maxAttempts && !this.isLocked) {
-    updates.$set = {
-      lockUntil: Date.now() + lockTime,
-    };
-  }
-
-  return this.updateOne(updates);
+  return bcrypt.compare(candidatePassword, this.password);
 };
 
-// Static method to find user by email
+userSchema.methods.updateLastLogin = function () {
+  this.lastLogin = new Date();
+  this.loginCount += 1;
+  return this.save();
+};
+
+userSchema.methods.generatePasswordResetToken = function () {
+  const crypto = require("crypto");
+  const token = crypto.randomBytes(32).toString("hex");
+  this.resetPasswordToken = token;
+  this.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+  return token;
+};
+
+userSchema.methods.generateEmailVerificationToken = function () {
+  const crypto = require("crypto");
+  const token = crypto.randomBytes(32).toString("hex");
+  this.emailVerificationToken = token;
+  this.emailVerificationExpires = Date.now() + 86400000; // 24 hours
+  return token;
+};
+
+userSchema.methods.incrementUsage = function (type) {
+  if (this.usage[type] !== undefined) {
+    this.usage[type] += 1;
+  }
+  return this.save();
+};
+
+userSchema.methods.resetMonthlyUsage = function () {
+  this.usage.chatMessages = 0;
+  this.usage.soilAnalysis = 0;
+  this.usage.fileUploads = 0;
+  this.usage.lastReset = new Date();
+  return this.save();
+};
+
+// Static methods
 userSchema.statics.findByEmail = function (email) {
-  return this.findOne({ email: email.toLowerCase() });
+  return this.findOne({ email: email.toLowerCase(), isActive: true });
 };
 
-// Static method to find active users
-userSchema.statics.findActive = function () {
-  return this.find({ isActive: true });
+userSchema.statics.findByGoogleId = function (googleId) {
+  return this.findOne({ googleId, isActive: true });
 };
 
-// Static method to find farmers
-userSchema.statics.findFarmers = function () {
-  return this.find({ role: "farmer", isActive: true });
+userSchema.statics.getActiveUsers = function () {
+  return this.find({ isActive: true }).sort({ createdAt: -1 });
 };
 
-// Static method to get user statistics
-userSchema.statics.getStats = async function () {
-  const stats = await this.aggregate([
-    {
-      $group: {
-        _id: "$role",
-        count: { $sum: 1 },
-      },
-    },
-  ]);
+userSchema.statics.getUsersByRole = function (role) {
+  return this.find({ role, isActive: true }).sort({ createdAt: -1 });
+};
 
-  const totalUsers = await this.countDocuments({ isActive: true });
-  const verifiedUsers = await this.countDocuments({
-    isActive: true,
-    emailVerified: true,
-  });
-
-  return {
-    total: totalUsers,
-    verified: verifiedUsers,
-    byRole: stats,
-  };
+// Don't return password and sensitive fields by default
+userSchema.methods.toJSON = function () {
+  const user = this.toObject();
+  delete user.password;
+  delete user.resetPasswordToken;
+  delete user.resetPasswordExpires;
+  delete user.emailVerificationToken;
+  delete user.emailVerificationExpires;
+  return user;
 };
 
 const User = mongoose.model("User", userSchema);

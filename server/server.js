@@ -12,6 +12,7 @@ import dotenv from "dotenv";
 
 // Import routes
 import authRoutes from "./routes/auth.js";
+import googleAuthRoutes from "./routes/googleAuth.js";
 import userRoutes from "./routes/users.js";
 import soilRoutes from "./routes/soil.js";
 import chatRoutes from "./routes/chat.js";
@@ -136,6 +137,7 @@ app.get("/health", (req, res) => {
 
 // API Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/auth", googleAuthRoutes);
 app.use("/api/users", authenticate, userRoutes);
 app.use("/api/soil", soilRoutes);
 app.use("/api/chat", chatRoutes);

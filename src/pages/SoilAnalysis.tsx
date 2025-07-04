@@ -122,7 +122,7 @@ const SoilAnalysis: React.FC = () => {
     if (data.phosphorus < 25) {
       result.phosphorus = {
         status: "critical",
-        message: "फास्फोरस की कमी है। DAP उर्वरक डालें।",
+        message: "फास्फोरस की कमी है। DAP उर्��रक डालें।",
       };
     } else if (data.phosphorus > 70) {
       result.phosphorus = { status: "warning", message: "फास्फोरस अधिक है।" };
@@ -222,13 +222,13 @@ const SoilAnalysis: React.FC = () => {
       />
 
       {/* Benefits Section */}
-      <section className="py-16 bg-white border-b">
+      <section className="py-16 bg-gradient-to-br from-green-50 to-blue-50 border-b">
         <div className="container-max section-padding">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
               Why Soil Analysis Matters
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
               Understanding your soil is the foundation of successful farming.
               Our analysis helps you make informed decisions.
             </p>

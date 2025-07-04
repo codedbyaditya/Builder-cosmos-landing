@@ -109,7 +109,7 @@ const SoilAnalysis: React.FC = () => {
     } else if (data.nitrogen > 80) {
       result.nitrogen = {
         status: "warning",
-        message: "नाइट्रोजन अधिक है। उर्वरक कम करें।",
+        message: "नाइट्रोजन अधिक है। उर्वरक कम करे��।",
       };
     } else {
       result.nitrogen = {
@@ -595,21 +595,22 @@ const SoilAnalysis: React.FC = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20 agri-gradient-bg text-white">
-        <div className="container-max section-padding text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+      <section className="py-20 bg-gradient-to-br from-green-600 via-blue-600 to-purple-700 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="container-max section-padding text-center relative z-10">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 animate-fade-in-up">
             Need Professional Soil Testing?
           </h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto opacity-90">
+          <p className="text-xl mb-8 max-w-3xl mx-auto opacity-90 animate-fade-in-up delay-200">
             For more detailed laboratory analysis and field assessments, contact
             our agricultural experts.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-400">
             <Button
               onClick={() => navigate("/contact")}
               size="lg"
               variant="secondary"
-              className="bg-white text-agri-primary hover:bg-gray-100"
+              className="bg-white text-gray-900 hover:bg-gray-100 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               Contact Our Experts <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
@@ -617,12 +618,16 @@ const SoilAnalysis: React.FC = () => {
               onClick={() => navigate("/chatbot")}
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white hover:text-agri-primary"
+              className="border-white text-white hover:bg-white hover:text-gray-900 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               Ask Our AI Assistant <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
         </div>
+
+        {/* Decorative elements */}
+        <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-xl"></div>
+        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
       </section>
     </div>
   );

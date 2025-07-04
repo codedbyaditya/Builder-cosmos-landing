@@ -136,10 +136,10 @@ const Home: React.FC = () => {
                 >
                   <Icon className="w-6 h-6" />
                 </div>
-                <div className="text-2xl font-bold text-gray-900 group-hover:text-agri-primary transition-colors duration-300">
+                <div className="text-2xl font-bold text-white group-hover:text-agri-primary transition-colors duration-300">
                   {stat.value}
                 </div>
-                <div className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
+                <div className="text-sm text-white group-hover:text-gray-200 transition-colors duration-300">
                   {stat.label}
                 </div>
               </div>

@@ -2,59 +2,40 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import { createErrorResponse } from "../utils/response.js";
 
-// Authenticate user using JWT
+// Standard authentication middleware - requires valid token
 export const authenticate = async (req, res, next) => {
   try {
-    let token = null;
-
-    // Get token from Authorization header
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith("Bearer ")) {
-      token = authHeader.substring(7);
-    }
-
-    // Get token from cookies as fallback
-    if (!token && req.cookies && req.cookies.accessToken) {
-      token = req.cookies.accessToken;
-    }
+    const token = extractToken(req);
 
     if (!token) {
       return res
         .status(401)
-        .json(createErrorResponse("Access token is required"));
+        .json(createErrorResponse("Access denied. No token provided."));
     }
 
-    // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id).select("-password");
 
-    // Find user
-    const user = await User.findById(decoded.id);
     if (!user) {
-      return res.status(401).json(createErrorResponse("User not found"));
+      return res
+        .status(401)
+        .json(createErrorResponse("Invalid token. User not found."));
     }
 
-    // Check if user is active
     if (!user.isActive) {
       return res
-        .status(403)
-        .json(createErrorResponse("Account is deactivated"));
+        .status(401)
+        .json(createErrorResponse("Account has been deactivated."));
     }
 
-    // Attach user to request
-    req.user = {
-      id: user._id,
-      email: user.email,
-      role: user.role,
-      name: user.name,
-    };
-
+    req.user = user;
     next();
   } catch (error) {
     if (error.name === "JsonWebTokenError") {
-      return res.status(401).json(createErrorResponse("Invalid access token"));
+      return res.status(401).json(createErrorResponse("Invalid token."));
     }
     if (error.name === "TokenExpiredError") {
-      return res.status(401).json(createErrorResponse("Access token expired"));
+      return res.status(401).json(createErrorResponse("Token has expired."));
     }
 
     console.error("Authentication error:", error);
@@ -64,13 +45,40 @@ export const authenticate = async (req, res, next) => {
   }
 };
 
-// Authorization middleware - check user roles
+// Optional authentication - doesn't fail if no token provided
+export const optionalAuth = async (req, res, next) => {
+  try {
+    const token = extractToken(req);
+
+    if (!token) {
+      req.user = null;
+      return next();
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id).select("-password");
+
+    if (user && user.isActive) {
+      req.user = user;
+    } else {
+      req.user = null;
+    }
+
+    next();
+  } catch (error) {
+    // For optional auth, we don't fail on token errors
+    req.user = null;
+    next();
+  }
+};
+
+// Role-based authorization middleware
 export const authorize = (...roles) => {
   return (req, res, next) => {
     if (!req.user) {
       return res
         .status(401)
-        .json(createErrorResponse("Authentication required"));
+        .json(createErrorResponse("Access denied. Authentication required."));
     }
 
     if (!roles.includes(req.user.role)) {
@@ -78,8 +86,7 @@ export const authorize = (...roles) => {
         .status(403)
         .json(
           createErrorResponse(
-            "Access denied. Insufficient permissions.",
-            `Required roles: ${roles.join(", ")}`,
+            `Access denied. Required roles: ${roles.join(", ")}`,
           ),
         );
     }
@@ -88,86 +95,223 @@ export const authorize = (...roles) => {
   };
 };
 
-// Optional authentication - doesn't fail if no token
-export const optionalAuth = async (req, res, next) => {
-  try {
-    let token = null;
+// Admin only middleware
+export const adminOnly = authorize("admin");
 
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith("Bearer ")) {
-      token = authHeader.substring(7);
-    }
+// Agent or Admin middleware
+export const agentOrAdmin = authorize("agent", "admin");
 
-    if (!token && req.cookies && req.cookies.accessToken) {
-      token = req.cookies.accessToken;
-    }
-
-    if (token) {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const user = await User.findById(decoded.id);
-
-      if (user && user.isActive) {
-        req.user = {
-          id: user._id,
-          email: user.email,
-          role: user.role,
-          name: user.name,
-        };
-      }
-    }
-
-    next();
-  } catch (error) {
-    // Silently continue without authentication
-    next();
+// Premium user middleware
+export const premiumOnly = (req, res, next) => {
+  if (!req.user) {
+    return res
+      .status(401)
+      .json(createErrorResponse("Access denied. Authentication required."));
   }
+
+  if (!req.user.subscription || req.user.subscription.plan === "free") {
+    return res
+      .status(403)
+      .json(
+        createErrorResponse(
+          "Access denied. Premium subscription required for this feature.",
+        ),
+      );
+  }
+
+  if (req.user.subscription.status !== "active") {
+    return res
+      .status(403)
+      .json(
+        createErrorResponse("Access denied. Your subscription is not active."),
+      );
+  }
+
+  next();
 };
 
-// Check if user owns resource or is admin
-export const ownershipOrAdmin = (resourceIdParam = "id") => {
-  return async (req, res, next) => {
-    try {
-      if (!req.user) {
-        return res
-          .status(401)
-          .json(createErrorResponse("Authentication required"));
-      }
+// Check if user owns the resource
+export const ensureResourceOwnership = (resourceIdParam = "id") => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res
+        .status(401)
+        .json(createErrorResponse("Authentication required."));
+    }
 
-      const resourceId = req.params[resourceIdParam];
-      const userId = req.user.id;
-      const userRole = req.user.role;
+    const resourceId = req.params[resourceIdParam];
+    const userId = req.user.id;
 
-      // Admin can access everything
-      if (userRole === "admin") {
-        return next();
-      }
+    // Admin can access all resources
+    if (req.user.role === "admin") {
+      return next();
+    }
 
-      // Check if user owns the resource
-      if (resourceId === userId) {
-        return next();
-      }
-
-      // For other resources, check in database
-      // This would need to be customized based on the resource type
+    // For other users, check ownership
+    if (resourceId !== userId) {
       return res
         .status(403)
-        .json(createErrorResponse("Access denied. Resource not owned by user"));
-    } catch (error) {
-      console.error("Ownership check error:", error);
-      res.status(500).json(createErrorResponse("Authorization check failed"));
+        .json(
+          createErrorResponse(
+            "Access denied. You can only access your own resources.",
+          ),
+        );
     }
+
+    next();
   };
 };
 
-// Rate limiting for sensitive operations
-export const sensitiveOperationLimit = (req, res, next) => {
-  // This would integrate with Redis or in-memory store
-  // For now, we'll use a simple implementation
-  const key = `sensitive_${req.user?.id || req.ip}`;
-  const limit = 5; // 5 attempts per hour
-  const window = 60 * 60 * 1000; // 1 hour
+// Rate limiting by user
+export const userRateLimit = (requestsPerMinute = 60) => {
+  const userRequests = new Map();
 
-  // In production, use Redis for this
-  // For now, just continue
-  next();
+  return (req, res, next) => {
+    const identifier = req.user?.id || req.ip;
+    const now = Date.now();
+    const minute = Math.floor(now / 60000);
+
+    const userKey = `${identifier}_${minute}`;
+
+    if (!userRequests.has(userKey)) {
+      userRequests.set(userKey, 1);
+    } else {
+      const count = userRequests.get(userKey);
+      if (count >= requestsPerMinute) {
+        return res
+          .status(429)
+          .json(
+            createErrorResponse("Rate limit exceeded. Please try again later."),
+          );
+      }
+      userRequests.set(userKey, count + 1);
+    }
+
+    // Clean up old entries
+    for (const [key] of userRequests) {
+      const keyMinute = parseInt(key.split("_")[1]);
+      if (minute - keyMinute > 5) {
+        // Keep only last 5 minutes
+        userRequests.delete(key);
+      }
+    }
+
+    next();
+  };
+};
+
+// Subscription check middleware
+export const checkSubscriptionLimits = (feature) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return next(); // For anonymous users, basic limits apply
+    }
+
+    const subscription = req.user.subscription;
+    const usage = req.user.usage || {};
+
+    // Define limits based on subscription plan
+    const limits = {
+      free: {
+        chatMessages: 50,
+        soilAnalysis: 5,
+        fileUploads: 10,
+      },
+      basic: {
+        chatMessages: 200,
+        soilAnalysis: 25,
+        fileUploads: 50,
+      },
+      premium: {
+        chatMessages: 1000,
+        soilAnalysis: 100,
+        fileUploads: 200,
+      },
+      enterprise: {
+        chatMessages: -1, // unlimited
+        soilAnalysis: -1,
+        fileUploads: -1,
+      },
+    };
+
+    const plan = subscription?.plan || "free";
+    const limit = limits[plan][feature];
+
+    if (limit !== -1 && usage[feature] >= limit) {
+      return res.status(429).json(
+        createErrorResponse(
+          `${feature} limit exceeded for ${plan} plan. Please upgrade your subscription.`,
+          {
+            currentUsage: usage[feature],
+            limit: limit,
+            plan: plan,
+          },
+        ),
+      );
+    }
+
+    next();
+  };
+};
+
+// Helper function to extract token from request
+const extractToken = (req) => {
+  let token = null;
+
+  // Check Authorization header
+  if (req.headers.authorization?.startsWith("Bearer ")) {
+    token = req.headers.authorization.substring(7);
+  }
+
+  // Check cookies as fallback
+  if (!token && req.cookies?.token) {
+    token = req.cookies.token;
+  }
+
+  // Check query parameter as last resort (not recommended for production)
+  if (!token && req.query.token) {
+    token = req.query.token;
+  }
+
+  return token;
+};
+
+// Token verification utility
+export const verifyToken = (token) => {
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Generate tokens
+export const generateTokens = (userId) => {
+  const accessToken = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN || "7d",
+  });
+
+  const refreshToken = jwt.sign(
+    { id: userId },
+    process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "30d",
+    },
+  );
+
+  return { accessToken, refreshToken };
+};
+
+export default {
+  authenticate,
+  optionalAuth,
+  authorize,
+  adminOnly,
+  agentOrAdmin,
+  premiumOnly,
+  ensureResourceOwnership,
+  userRateLimit,
+  checkSubscriptionLimits,
+  verifyToken,
+  generateTokens,
 };

@@ -104,7 +104,7 @@ const SoilAnalysis: React.FC = () => {
     if (data.nitrogen < 30) {
       result.nitrogen = {
         status: "critical",
-        message: "न���इट्रोजन की कमी है। यूरिया का प्रयोग करें।",
+        message: "���ाइट्रोजन की कमी है। यूरिया का प्रयोग करें।",
       };
     } else if (data.nitrogen > 80) {
       result.nitrogen = {
@@ -447,10 +447,10 @@ const SoilAnalysis: React.FC = () => {
               </Card>
 
               {/* Results Panel */}
-              <Card className="card-agri">
-                <CardHeader>
+              <Card className="bg-white shadow-xl border-0 hover:shadow-2xl transition-all duration-300">
+                <CardHeader className="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-t-lg">
                   <CardTitle className="flex items-center space-x-2">
-                    <TrendingUp className="w-5 h-5 text-agri-primary" />
+                    <TrendingUp className="w-5 h-5 text-white" />
                     <span>Analysis Results</span>
                   </CardTitle>
                 </CardHeader>

@@ -1,6 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Send, Bot, User, Globe, Mic, Volume2 } from "lucide-react";
+import {
+  Send,
+  Bot,
+  User,
+  Globe,
+  Mic,
+  Volume2,
+  AlertCircle,
+} from "lucide-react";
 import Hero from "../components/Hero";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -18,6 +26,7 @@ import {
   SelectValue,
 } from "../components/ui/select";
 import { useLanguage } from "../contexts/LanguageContext";
+import { chatbotService } from "../api/chatbot";
 
 interface Message {
   id: string;
@@ -29,25 +38,36 @@ interface Message {
 const Chatbot: React.FC = () => {
   const navigate = useNavigate();
   const { language, setLanguage, t } = useLanguage();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [sessionId] = useState(
+    () => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+  );
+
+  const getWelcomeMessage = () => {
+    if (language === "hi") {
+      return "नमस्ते! मैं बिंदिसा एग्रीटेक का AI कृषि सहायक हूं। मैं आपकी खेती संबंधी समस्याओं में मदद कर सकता हूं। फसल, मि���्टी, कीट, मौसम, या कृषि से जुड़ा कोई भी सवाल पूछें।";
+    } else if (language === "mr") {
+      return "नमस्कार! मी बिंदिसा एग्रीटेकचा AI कृषी सहाय्यक आहे। मी तुमच्या शेतीच्या समस्यांमध्ये मदत करू शकतो। पीक, माती, कीड, हवामान, किंवा शेतीशी संबंधित कोणताही प्रश्न विचारा।";
+    } else {
+      return "Hello! I am Bindisa Agritech's AI agricultural assistant. I can help you with farming-related queries including crops, soil, pests, weather, and agricultural practices. What would you like to know?";
+    }
+  };
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
       type: "bot",
-      content:
-        language === "hi"
-          ? "नमस्ते! मैं बिंदिसा एग्रीटेक का कृषि सहायक हूं। मैं आपकी खेती संबंधी समस्याओं में मदद कर सकता हूं। आप मुझसे क्या पूछना चाहते हैं?"
-          : language === "mr"
-            ? "नमस्कार! मी बिंदिसा एग्रीटेकचा कृषी सहाय्यक आहे। मी तुमच्या शेतीच्या समस्यांमध्ये मदत करू शकतो. तुम्हाला काय विचारायचे आहे?"
-            : "Hello! I am Bindisa Agritech's agricultural assistant. I can help you with farming-related queries. What would you like to ask?",
+      content: getWelcomeMessage(),
       timestamp: new Date(),
     },
   ]);
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const sampleQuestions = {
     hi: [
-      "मेरी फसल में कीट लग गए हैं, क्या करूं?",
+      "मेरी फसल में कीट लग गए हैं, क���या करूं?",
       "मिट्टी की जांच कैसे करें?",
       "बारिश के बाद क्या सावधानी बरतें?",
       "उर्वरक की सही मात्रा क्या है?",
@@ -69,53 +89,7 @@ const Chatbot: React.FC = () => {
     ],
   };
 
-  const getResponse = (query: string): string => {
-    const lowerQuery = query.toLowerCase();
-
-    if (language === "hi") {
-      if (lowerQuery.includes("कीट") || lowerQuery.includes("पेस्ट")) {
-        return "कीट प्रबंधन के लिए: 1) नीम का तेल स्प्रे करें 2) जैविक कीटनाशक का उपयोग करें 3) फसल चक्र अपनाएं 4) साफ-सफाई रखें। अधिक जानकारी के लिए हमारे विशेषज्ञों से संपर्क करें।";
-      }
-      if (lowerQuery.includes("मिट्टी") || lowerQuery.includes("soil")) {
-        return "मिट्टी की जांच के लिए: 1) pH मीटर से pH चेक करें 2) नमी का स्तर देखें 3) NPK टेस्ट कराएं 4) हमारा सॉयल एनालिसिस टूल इस्तेमाल करें। क्या आप हमारा टूल आजमाना चाहेंगे?";
-      }
-      if (lowerQuery.includes("बारिश") || lowerQuery.includes("पानी")) {
-        return "बारिश के बाद: 1) खेत से अतिरिक्त पानी निकालें 2) फंगस के लिए दवा छिड़कें 3) पौधों को सहारा दें 4) मिट्टी की नमी चेक करें। नियमित निगरानी जरूरी है।";
-      }
-      if (lowerQuery.includes("उर्वरक") || lowerQuery.includes("खाद")) {
-        return "उर्वरक की मात्रा फसल के अनुसार तय करें: 1) धान - 120:60:40 NPK प्रति हेक्टेयर 2) गेहूं - 150:75:50 NPK प्रति हेक्टेयर 3) मिट्टी टेस्ट के आधार पर समायोजन करें।";
-      }
-      return "आपका प्रश्न दिलचस्प है। कृपया अधिक विस्तार से बताएं या हमारे विशेषज्ञों से संपर्क करें। आप हमारे अन्य टूल्स भी आजमा सकते हैं।";
-    }
-
-    if (language === "mr") {
-      if (lowerQuery.includes("कीड") || lowerQuery.includes("pest")) {
-        return "कीड व्यवस्थापनासाठी: 1) नीम तेल फवारा करा 2) जैविक कीटकनाशकाचा वापर करा 3) पीक चक्र अवलंबा 4) स्वच्छता ठेवा. अधिक माहितीसाठी आमच्या तज्ञांशी संपर्क साधा.";
-      }
-      if (lowerQuery.includes("माती") || lowerQuery.includes("soil")) {
-        return "मातीची तपासणी करण्यासाठी: 1) pH मीटरने pH तपासा 2) ओलावा पातळी पहा 3) NPK चाचणी करा 4) आमचे सॉयल एनालिसिस टूल वापरा. तुम्हाला आमचे टूल वापरायचे आहे का?";
-      }
-      return "तुमचा प्रश्न मनोरंजक आहे. कृपया अधिक तपशीलाने सांगा किंवा आमच्या तज्ञांशी संपर्क साधा.";
-    }
-
-    // English responses
-    if (lowerQuery.includes("pest") || lowerQuery.includes("insect")) {
-      return "For pest management: 1) Apply neem oil spray 2) Use biological pesticides 3) Practice crop rotation 4) Maintain field hygiene. Contact our experts for detailed guidance.";
-    }
-    if (lowerQuery.includes("soil") || lowerQuery.includes("test")) {
-      return "For soil testing: 1) Check pH with pH meter 2) Monitor moisture levels 3) Test NPK levels 4) Use our Soil Analysis tool. Would you like to try our analysis tool?";
-    }
-    if (lowerQuery.includes("rain") || lowerQuery.includes("water")) {
-      return "After rainfall: 1) Drain excess water 2) Apply fungicide spray 3) Provide plant support 4) Monitor soil moisture. Regular monitoring is essential.";
-    }
-    if (lowerQuery.includes("fertilizer") || lowerQuery.includes("nutrient")) {
-      return "Fertilizer amounts vary by crop: 1) Rice - 120:60:40 NPK per hectare 2) Wheat - 150:75:50 NPK per hectare 3) Adjust based on soil test results.";
-    }
-
-    return "That's an interesting question! Please provide more details or contact our experts. You can also try our other agricultural tools.";
-  };
-
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
 
     const userMessage: Message = {
@@ -126,25 +100,78 @@ const Chatbot: React.FC = () => {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const currentMessage = inputMessage;
     setInputMessage("");
     setIsTyping(true);
+    setHasError(false);
 
-    // Simulate bot typing delay
-    setTimeout(() => {
+    try {
+      // Call ChatGPT API
+      const response = await chatbotService.sendMessage(
+        currentMessage,
+        language,
+        sessionId,
+      );
+
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
         type: "bot",
-        content: getResponse(inputMessage),
+        content: response.message,
         timestamp: new Date(),
       };
+
       setMessages((prev) => [...prev, botResponse]);
+
+      if (response.error) {
+        setHasError(true);
+      }
+    } catch (error) {
+      console.error("Chat error:", error);
+
+      // Fallback response based on language
+      const fallbackMessages = {
+        en: "I apologize, but I'm having trouble connecting right now. Please try again in a moment or contact our agricultural experts for immediate assistance.",
+        hi: "मुझे खुशी है, लेकिन फिलहाल मुझे जुड़ने में समस्या हो रही है। कृपया थोड़ी देर बाद फिर कोशिश करें या तत्काल सहायता के लिए हमारे कृषि विशेषज्ञों से संपर्क करें।",
+        mr: "मला खुशी आहे, पण सध्या मला जोडण्यात समस्या येत आहे. कृपया थोड्या वेळाने पुन्हा प्रयत्न करा ���िंवा त्वरित मदतीसाठी आमच्या कृषी तज्ञांशी संपर्क साधा.",
+      };
+
+      const errorResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        type: "bot",
+        content:
+          fallbackMessages[language as keyof typeof fallbackMessages] ||
+          fallbackMessages.en,
+        timestamp: new Date(),
+      };
+
+      setMessages((prev) => [...prev, errorResponse]);
+      setHasError(true);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const handleQuestionClick = (question: string) => {
     setInputMessage(question);
   };
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // Update welcome message when language changes
+  useEffect(() => {
+    setMessages((prev) => [
+      {
+        ...prev[0],
+        content: getWelcomeMessage(),
+      },
+      ...prev.slice(1),
+    ]);
+    // Clear chat history when language changes
+    chatbotService.clearHistory(sessionId);
+  }, [language, sessionId]);
 
   return (
     <div>
@@ -254,9 +281,18 @@ const Chatbot: React.FC = () => {
                     <CardTitle className="flex items-center space-x-2">
                       <Bot className="w-5 h-5 text-agri-primary" />
                       <span>Agricultural Assistant</span>
-                      <span className="text-sm text-green-600 bg-green-100 px-2 py-1 rounded-full">
-                        Online
+                      <span
+                        className={`text-sm px-2 py-1 rounded-full ${
+                          hasError
+                            ? "text-yellow-600 bg-yellow-100"
+                            : "text-green-600 bg-green-100"
+                        }`}
+                      >
+                        {hasError ? "Limited" : "Online"}
                       </span>
+                      {hasError && (
+                        <AlertCircle className="w-4 h-4 text-yellow-600" />
+                      )}
                     </CardTitle>
                   </CardHeader>
 

@@ -52,48 +52,48 @@ export class ChatbotService {
 
     if (language === "hi") {
       if (lowerMessage.includes("कीट") || lowerMessage.includes("pest")) {
-        return "कीट प्रबंधन के लिए: 1) नीम का तेल स्प्रे करें 2) जैविक कीटनाशक का उपयोग करें 3) फसल चक्र अपनाएं 4) साफ-सफाई रखें। अधिक जानकारी के लिए हमारे विशेषज्ञों से संपर्क करें।";
+        return "कीट नियंत्रण के लिए: खेत में नीम का तेल स्प्रे करें (10ml प्रति लीटर पानी), जैविक कीटनाशक इस्तेमाल करें, और फसल चक्र अपनाएं। साफ-सफाई रखना भी जरूरी है।";
       }
       if (lowerMessage.includes("मिट्टी") || lowerMessage.includes("soil")) {
-        return "मिट्टी की जांच के लिए: 1) pH मीटर से pH चेक करें 2) नमी का स्तर देखें 3) NPK टेस्ट कराएं 4) हमारा सॉयल एनालिसिस टूल इस्तेमाल करें। क्या आप हमारा टूल आजमाना चाहेंगे?";
+        return "मिट्टी की गुणवत्ता जांचने के लिए, अपने खेत से 5-6 इंच गहरा नमूना लें, इसे सुखाएं और स्थानीय मिट्टी जांच प्रयोगशाला में ले जाएं। वे pH और NPK की जांच करेंगे। रिपोर्ट के आधार पर सही उर्वरक चुनें।";
       }
       if (lowerMessage.includes("बारिश") || lowerMessage.includes("पानी")) {
-        return "बारिश के बाद: 1) खेत से अतिरिक्त पानी निकालें 2) फंगस के लिए दवा छिड़कें 3) पौधों को सहारा दें 4) मिट्टी की नमी चेक करें। नियमित निगरानी जरूरी है।";
+        return "बारिश के बाद खेत से अतिरिक्त पानी निकालें, फफूंद रोधी दवा छिड़कें, और पौधों को सहारा दें। मिट्टी की नमी नियमित रूप से चेक करते रहें।";
       }
       if (lowerMessage.includes("उर्वरक") || lowerMessage.includes("खाद")) {
-        return "उर्वरक की मात्रा फसल के अनुसार तय करें: 1) धान - 120:60:40 NPK प्रति हेक्टेयर 2) गेहूं - 150:75:50 NPK प्रति हेक्टेयर 3) मिट्टी टेस्ट के आधार पर समायोजन करें।";
+        return "धान के लिए 120:60:40 NPK प्रति हेक्टेयर और गेहूं के लिए 150:75:50 NPK प्रति हेक्टेयर उपयोग करें। मिट्टी जा��च रिपोर्ट के अनुसार मात्रा समायोजित करें।";
       }
-      return "आपका प्रश्न दिलचस्प है। कृपया अधिक विस्तार से बताएं या हमारे विशेषज्ञों से संपर्क करें। आप हमारे अन्य टूल्स भी आजमा सकते हैं।";
+      return "कृपया अपना प्रश्न थोड़ा और विस्तार से बताएं ताकि मैं आपको बेहतर सलाह दे सकूं।";
     }
 
     if (language === "mr") {
       if (lowerMessage.includes("कीड") || lowerMessage.includes("pest")) {
-        return "कीड व्यवस्थापनासाठी: 1) नीम तेल फवारा करा 2) जैविक कीटकनाशकाचा वापर करा 3) पीक चक्र अवलंबा 4) स्वच्छता ठेवा. अधिक माहितीसाठी आमच्या तज्ञांशी संपर्क साधा.";
+        return "कीड नियंत्रणासाठी: शेतात नीम तेल फवारा करा (10ml प्रति लीटर पाणी), जैविक कीटकनाशक वापरा, आणि पीक चक्र अवलंबा. स्वच्छता देखील महत्वाची आहे.";
       }
       if (lowerMessage.includes("माती") || lowerMessage.includes("soil")) {
-        return "मातीची तपासणी करण्यासाठी: 1) pH मीटरने pH तपासा 2) ओलावा पातळी पहा 3) NPK चाचणी करा 4) आमचे सॉयल एनालिसिस टूल वापरा. तुम्हाला आमचे टूल वापरायचे आहे का?";
+        return "मातीची गुणवत्ता तपासण्यासाठी, तुमच्या शेतातून 5-6 इंच खोल नमुना घ्या, तो वाळवा आणि स्थानिक माती चाचणी प्रयोगशाळेत न्या. ते pH आणि NPK तपासतील. अहवालानुसार योग्य खत निवडा.";
       }
-      return "तुमचा प्रश्न मनोरंजक आहे. कृपया अधिक तपशीलाने सांगा किंवा आमच्या तज्ञांशी संपर्क साधा.";
+      return "कृपया तुमचा प्रश्न थोडा अधिक तपशीलाने सांगा जेणेकरून मी तुम्हाला चांगला सल्ला देऊ शकेन.";
     }
 
     // English responses
     if (lowerMessage.includes("pest") || lowerMessage.includes("insect")) {
-      return "For pest management: 1) Apply neem oil spray 2) Use biological pesticides 3) Practice crop rotation 4) Maintain field hygiene. Contact our experts for detailed guidance.";
+      return "For pest control: Apply neem oil spray (10ml per liter water), use biological pesticides, and practice crop rotation. Maintaining field hygiene is also important.";
     }
     if (lowerMessage.includes("soil") || lowerMessage.includes("test")) {
-      return "For soil testing: 1) Check pH with pH meter 2) Monitor moisture levels 3) Test NPK levels 4) Use our Soil Analysis tool. Would you like to try our analysis tool?";
+      return "To test your soil quality, collect a small sample from your field (5–6 inches deep), dry it, and take it to a local soil testing lab. They will check for pH, nitrogen, phosphorus, and potassium. Based on the report, you can select the right fertilizer and crop.";
     }
     if (lowerMessage.includes("rain") || lowerMessage.includes("water")) {
-      return "After rainfall: 1) Drain excess water 2) Apply fungicide spray 3) Provide plant support 4) Monitor soil moisture. Regular monitoring is essential.";
+      return "After rainfall: drain excess water from fields, apply fungicide spray, and provide plant support. Monitor soil moisture regularly.";
     }
     if (
       lowerMessage.includes("fertilizer") ||
       lowerMessage.includes("nutrient")
     ) {
-      return "Fertilizer amounts vary by crop: 1) Rice - 120:60:40 NPK per hectare 2) Wheat - 150:75:50 NPK per hectare 3) Adjust based on soil test results.";
+      return "Use 120:60:40 NPK per hectare for rice and 150:75:50 NPK per hectare for wheat. Adjust quantities based on your soil test report.";
     }
 
-    return "That's an interesting question! Please provide more details or contact our experts. You can also try our other agricultural tools.";
+    return "Please provide more details about your question so I can give you better advice.";
   }
 
   // Create a new chat session
